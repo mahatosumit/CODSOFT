@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommendation System</h1>
+        <form id="recommendation-form">
+            <label for="movie">Select a Movie:</label>
+            <select id="movie" name="movie">
+                {% for movie in movies %}
+                <option value="{{ movie }}">{{ movie }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" onclick="getRecommendations()">Get Recommendations</button>
+        </form>
+        <div id="recommendations"></div>
+    </div>
+    <script>
+        function getRecommendations() {
+            const movie = document.getElementById('movie').value;
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ movie: movie })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const recommendationsDiv = document.getElementById('recommendations');
+                recommendationsDiv.innerHTML = '';
+                if (data[0].error) {
+                    recommendationsDiv.innerHTML = `<p>${data[0].error}</p>`;
+                } else {
+                    data.forEach(recommendation => {
+                        recommendationsDiv.innerHTML += `<p>${recommendation.Film} - ${recommendation.Genre}</p>`;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
