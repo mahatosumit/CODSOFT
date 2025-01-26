@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Load and prepare data
 try:
     # Load the dataset
-    movies_df = pd.read_csv('./movies.csv')
+    movies_df = pd.read_csv(r'C:\Users\mstor\OneDrive\Pictures\SUMIT\CODSOFT\RECOMMENDATION SYSTEM\movies.csv')
 
     # Print column names for debugging (remove after debugging)
     print(movies_df.columns)
